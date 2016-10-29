@@ -2,6 +2,7 @@ package com.ribasoftware.marvelproject.api;
 
 import java.util.List;
 
+//// TODO: 23/09/16 23/09/16 implements a Super class with atributes below they are common to Items, Series, Stories Events and Comics
 public class SeriesCharacter {
     private int available;
     private String collectionURI;

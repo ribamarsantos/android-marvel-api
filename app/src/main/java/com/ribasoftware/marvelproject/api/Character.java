@@ -1,10 +1,17 @@
 package com.ribasoftware.marvelproject.api;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 //Character
-public class Character {
-    private int id;
+public class Character implements Parcelable {
+    private long _id;
+    @SerializedName("id")
+    private int idWeb;
     private String name;
     private String description;
     private String modified;
@@ -20,12 +27,25 @@ public class Character {
 
     private List<Url> urls;
 
-    public int getId() {
-        return id;
+
+    public Character() {
+
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public long getId() {
+        return _id;
+    }
+
+    public void setId(long id) {
+        this._id = id;
+    }
+
+    public int getIdWeb() {
+        return idWeb;
+    }
+
+    public void setIdWeb(int idWeb) {
+        this.idWeb = idWeb;
     }
 
     public String getName() {
@@ -108,5 +128,47 @@ public class Character {
         this.urls = urls;
     }
 
+    public static Creator<Character> getCREATOR() {
+        return CREATOR;
+    }
 
+    protected Character(Parcel in) {
+        _id = in.readLong();
+        idWeb = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        modified = in.readString();
+        thumbnail = in.readParcelable(ThumbnailCharacter.class.getClassLoader());
+        resourceURI = in.readString();
+        urls = in.createTypedArrayList(Url.CREATOR);
+    }
+
+    public static final Creator<Character> CREATOR = new Creator<Character>() {
+        @Override
+        public Character createFromParcel(Parcel in) {
+            return new Character(in);
+        }
+
+        @Override
+        public Character[] newArray(int size) {
+            return new Character[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(_id);
+        parcel.writeInt(idWeb);
+        parcel.writeString(name);
+        parcel.writeString(description);
+        parcel.writeString(modified);
+        parcel.writeParcelable(thumbnail, i);
+        parcel.writeString(resourceURI);
+        parcel.writeTypedList(urls);
+    }
 }

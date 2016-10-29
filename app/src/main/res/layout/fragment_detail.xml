@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context="com.ribasoftware.marvelproject.ui.DetailCharacterFragment">
+
+    <ImageView
+        android:id="@+id/detail_character_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="centerCrop"
+        android:transitionName="@string/transition_thumbnail" />
+
+    <TextView
+        android:id="@+id/detail_text_character_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_character_thumbnail"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:text="Character Name" />
+
+    <TextView
+        android:id="@+id/detail_text_character_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_text_character_name"
+        tools:text="Character description" />
+
+    <TextView
+        android:id="@+id/detail_text_character_last_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/detail_text_character_description"
+        android:gravity="center"
+        android:inputType="datetime"
+        tools:text="2013-12-17T18:35:54-0500" />
+
+    <TextView
+        android:id="@+id/detail_text_character_url_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_text_character_last_update"
+        android:autoLink="web"
+        android:clickable="true"
+        android:gravity="center"
+        android:linksClickable="true"
+        android:text="@string/detail"
+        tools:text="@string/detail" />
+
+    <TextView
+        android:id="@+id/detail_text_character_url_wiki"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_text_character_url_detail"
+        android:autoLink="web"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/wiki"
+        tools:text="@string/wiki" />
+
+
+    <TextView
+        android:id="@+id/detail_text_character_comics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_text_character_url_wiki"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:text="@string/txt_comics" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_detail_character_comics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_text_character_comics"
+        android:background="#9E9E9E"
+        android:scrollbars="horizontal" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/recyclerview_detail_character_comics"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_add_favorite" />
+
+
+</RelativeLayout>
