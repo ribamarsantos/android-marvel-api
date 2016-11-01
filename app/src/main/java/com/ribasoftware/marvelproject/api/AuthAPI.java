@@ -23,8 +23,8 @@ public class AuthAPI {
     public AuthAPI(){
         timeStamp  = String.valueOf(System.currentTimeMillis());
         config     = new FBRemoteConfig();
-        privateKey = "fb1528db57fa6be41901543020a07f322135fbda";//config.getKeyValue(KEY_PRIVATE);
-        publicKey  = "811ea1386983b5d67115228399660d1e";//config.getKeyValue(KEY_PUBLIC);
+        privateKey = config.getKeyValue(KEY_PRIVATE);
+        publicKey  = config.getKeyValue(KEY_PUBLIC);
     }
 
     public String getPublicKey() {
