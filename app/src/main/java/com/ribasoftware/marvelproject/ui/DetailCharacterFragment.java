@@ -59,8 +59,12 @@ public class DetailCharacterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // if ( savedInstanceState == null){
+       //     mCharacter = (Character) getArguments().getParcelable(EXTRA_CHARACTER);
+       // }else{
+            mCharacter = getActivity().getIntent().getParcelableExtra(EXTRA_CHARACTER);
+        //}
 
-        mCharacter = getActivity().getIntent().getParcelableExtra(EXTRA_CHARACTER);
 
     }
 

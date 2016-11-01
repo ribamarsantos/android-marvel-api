@@ -44,6 +44,7 @@ public class CharacterListFragment extends Fragment {
     private SearchView mSearchView;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
+    private View mLoading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,9 @@ public class CharacterListFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_character_list, container, false);
 
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recyclerview_Character);
-
+        mEmptyView    = layout.findViewById(R.id.empty_result);
+        mEmptyView.setVisibility(View.GONE);
+        mLoading      = layout.findViewById(R.id.loading);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         }else {
@@ -112,6 +115,9 @@ public class CharacterListFragment extends Fragment {
     private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
+            mLoading.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
             startCharacterLoader(query);
             return true;
         }
@@ -120,6 +126,8 @@ public class CharacterListFragment extends Fragment {
         public boolean onQueryTextChange(String newText) {
             return false;
         }
+
+
     };
 
     private void startCharacterLoader(String query) {
@@ -133,6 +141,8 @@ public class CharacterListFragment extends Fragment {
     // Callback of LoaderManager
 
     private LoaderManager.LoaderCallbacks<List<Character>> loaderCallbacks = new LoaderManager.LoaderCallbacks<List<Character>>() {
+
+
         @Override
         public Loader<List<Character>> onCreateLoader(int id, Bundle args) {
             Log.d("RMS", "onCreateLoader");
@@ -147,13 +157,16 @@ public class CharacterListFragment extends Fragment {
                 mCharacters.clear();
                 mCharacters.addAll(data);
                 mAdapter.notifyDataSetChanged();
+                mEmptyView.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
             } else {
+                mEmptyView.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.GONE);
-
-
             }
+            mLoading.setVisibility(View.GONE);
         }
+
+
 
         @Override
         public void onLoaderReset(Loader<List<Character>> loader) {
@@ -165,10 +178,20 @@ public class CharacterListFragment extends Fragment {
     private OnCharacterClickListener mClickListener = new OnCharacterClickListener() {
         @Override
         public void onCharacterClick(Character character, int position) {
-            Intent it = new Intent(getActivity(), CharacterDetailActivity.class);
+            // mesmo com a pasta sw600dp nao esta vindo false nem true para table :/
+            Log.d("RMS",String.valueOf(getResources().getBoolean(R.bool.phone)));
+            if ( getResources().getBoolean(R.bool.phone)) {
+                Intent it = new Intent(getActivity(), CharacterDetailActivity.class);
 
-            it.putExtra(CharacterDetailActivity.EXTRA_CHARACTER, character);
-            startActivity(it);
+                it.putExtra(CharacterDetailActivity.EXTRA_CHARACTER, character);
+                startActivity(it);
+            }else{
+//                DetailCharacterFragment detailCharacterFragment = DetailCharacterFragment.newInstance(character);
+//                getActivity().getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.placeholderDetail, detailCharacterFragment)
+//                        .commit();
+            }
         }
     };
 

@@ -2,6 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="false">
+    android:id="@+id/loading"
+    android:weightSum="1">
+
+    <ProgressBar
+        style="@style/load_style"
+        android:id="@+id/progressBar5"
+        android:layout_height="47dp" />
 
 </LinearLayout>

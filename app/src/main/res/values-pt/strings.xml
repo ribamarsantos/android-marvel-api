@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fãs da Marvel</string>
+    <string name="action_settings">Configurações</string>
+    <string name="content_image">Imagem do Personagem</string>
+    <string name="detail">Detalhe</string>
+    <string name="hint_search">Procurar</string>
+    <string name="hint_search_options">Opções</string>
+    <string name="msg_saved">Salvo</string>
+    <string name="msg_exist">Já é um favorito</string>
+    <string name="msg_undo">Desfazer</string>
+    <string name="tab_favorites">Favoritos</string>
+    <string name="tab_search">Procurar</string>
+    <string name="txt_character_name">Nome</string>
+    <string name="txt_comics">Quadrinhos</string>
+    <string name="empty_text">Nenhum Personagem encontrado</string>
+</resources>

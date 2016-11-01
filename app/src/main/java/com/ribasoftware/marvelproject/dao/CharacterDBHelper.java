@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ribasoftware.marvelproject.R;
-
 /**
  * Created by ribamar on 06/10/16.
  */
@@ -16,7 +14,7 @@ public class CharacterDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "dbCharacter";
 
     public CharacterDBHelper(Context context) {
-        super(context, DB_NAME, null, R.string.versionDB);
+        super(context, DB_NAME, null, 1);
     }
 
     @Override

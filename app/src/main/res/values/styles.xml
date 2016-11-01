@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#212121</item>
         <item name="colorPrimaryDark">#424242</item>
-        <item name="colorAccent">#9E9E9E</item>
+        <item name="colorAccent">#fff</item>
 
     </style>
 
@@ -17,4 +17,14 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="load_style" parent="android:Widget.Material.Light.ProgressBar.Large">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:labelFor">@+id/loading</item>
+        <item name="android:layout_weight">0.05</item>
+        <item name="android:theme">?attr/actionBarPopupTheme</item>
+    </style>
 </resources>
