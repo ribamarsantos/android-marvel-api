@@ -4,7 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true"/>
 
     <application
         android:allowBackup="true"
@@ -12,6 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTop">
@@ -23,7 +29,12 @@
         </activity>
         <activity
             android:name=".ui.CharacterDetailActivity"
-            android:parentActivityName=".ui.MainActivity" />
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ui.MainActivity" />
+        </activity>
 
         <provider
             android:name=".dao.CharacterProvider"

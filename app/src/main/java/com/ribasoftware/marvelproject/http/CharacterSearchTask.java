@@ -27,7 +27,7 @@ public class CharacterSearchTask extends AsyncTaskLoader<List<Character>> {
     public CharacterSearchTask(Context context, String query) {
         super(context);
         Log.d("RMS", "constructor - CharacterSearchTask");
-        this.offSet     = 0;
+        this.offSet = 0;
         this.characters = new ArrayList<>();
         this.query = query;
     }
@@ -35,17 +35,13 @@ public class CharacterSearchTask extends AsyncTaskLoader<List<Character>> {
     @Override
     public List<Character> loadInBackground() {
 
-        Log.d("RMS", "loadInBackground");
-
         dataWrapper = CharacterHttp.getAllCharacter(query, offset);
         if (dataWrapper != null && dataWrapper.getData() != null && dataWrapper.getData().getResults().size() > 0) {
             characters = dataWrapper.getData().getResults();
             return characters;
-        }else{
+        } else {
             return null;
         }
-
-
 
 
     }
@@ -53,19 +49,16 @@ public class CharacterSearchTask extends AsyncTaskLoader<List<Character>> {
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
-        Log.d("RMS", "OnStarLoading");
-        if ( query != null) {
+        if (query != null) {
             forceLoad();
-        }else{
+        } else {
             deliverResult(characters);
         }
     }
 
     @Override
     public void deliverResult(List<Character> data) {
-
         characters = data;
         super.deliverResult(data);
-        Log.d("RMS", "deliverResult");
     }
 }

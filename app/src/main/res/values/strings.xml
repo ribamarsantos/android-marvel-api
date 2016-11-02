@@ -16,5 +16,6 @@
     <string name="msg_undo">Undo</string>
     <string name="msg_exist">Already a favorite</string>
     <string name="empty_text">No Character Found</string>
+    <string name="title_character_detail">Character details</string>
 
 </resources>

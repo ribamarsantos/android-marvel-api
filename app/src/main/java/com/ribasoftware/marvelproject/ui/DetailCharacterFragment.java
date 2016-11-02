@@ -2,6 +2,7 @@ package com.ribasoftware.marvelproject.ui;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,11 +11,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,8 +38,8 @@ public class DetailCharacterFragment extends Fragment {
     private TextView txtDescription;
     private TextView txtName;
     private TextView txtLastUpdate;
-    private TextView txtUrlWiki;
-    private TextView txtUrlDetail;
+    private ImageButton btnUrlWiki;
+    private ImageButton btnUrlDetail;
     private ImageView imgThumbnail;
     private RecyclerView recyclerviewComics;
     private FloatingActionButton fltactbtnAddFavorite;
@@ -59,13 +59,13 @@ public class DetailCharacterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // if ( savedInstanceState == null){
-       //     mCharacter = (Character) getArguments().getParcelable(EXTRA_CHARACTER);
-       // }else{
+        setRetainInstance(true);
+        // if its from phone get
+        if (getResources().getBoolean(R.bool.phone)){
             mCharacter = getActivity().getIntent().getParcelableExtra(EXTRA_CHARACTER);
-        //}
-
-
+        }else {
+            mCharacter = (Character) getArguments().getParcelable(EXTRA_CHARACTER);
+        }
     }
 
     @Override
@@ -73,11 +73,8 @@ public class DetailCharacterFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-
-        this.recyclerviewComics = (RecyclerView) view.findViewById(R.id.recyclerview_detail_character_comics);
-        this.txtUrlDetail       = (TextView) view.findViewById(R.id.detail_text_character_url_detail);
-        this.txtUrlWiki         = (TextView) view.findViewById(R.id.detail_text_character_url_wiki);
-        this.txtLastUpdate      = (TextView) view.findViewById(R.id.detail_text_character_last_update);
+        this.btnUrlDetail       = (ImageButton) view.findViewById(R.id.btnDetailMore);
+        this.btnUrlWiki         = (ImageButton) view.findViewById(R.id.btnWiki);
         this.txtDescription     = (TextView) view.findViewById(R.id.detail_text_character_description);
         this.txtName            = (TextView) view.findViewById(R.id.detail_text_character_name);
         this.imgThumbnail       = (ImageView) view.findViewById(R.id.detail_character_thumbnail);
@@ -93,33 +90,27 @@ public class DetailCharacterFragment extends Fragment {
     private View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.d("RMS", "Clicou");
-
             toggleFavorite();
-
         }
     };
     private void toggleFavorite() {
         if (mCharacter != null ){
+            // verify if the Character is already a Favorite
            boolean isFavorite = isFavorite();
+
             if (!isFavorite) {
                 long id = insertCharacter();
-
-                Log.d("RMS", "inserted" + id);
                 if (id > 0) {
                     mCharacter.setId(id);
                 }
             }
 
+            //TODO - SetAction -> delete from Favorite
+
             Snackbar.make(getView(),
                     isFavorite ? R.string.msg_exist : R.string.msg_saved,
                     Snackbar.LENGTH_LONG)
-                    .setAction(R.string.msg_undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //toggleFavorite();
-                        }
-                    }).show();
+                    .show();
         }
 
     }
@@ -139,25 +130,30 @@ public class DetailCharacterFragment extends Fragment {
     }
 
     private void updateUI() {
+            getActivity().setTitle(mCharacter.getName());
             this.txtName.setText(mCharacter.getName());
             this.txtDescription.setText(mCharacter.getDescription());
-            this.txtLastUpdate.setText(mCharacter.getModified());
             if ( mCharacter.getUrls() != null && mCharacter.getUrls().size() > 0) {
 
                 for (Url url : mCharacter.getUrls()) {
                     if (url.getType().equalsIgnoreCase(MarvelUtil.URL_TYPE_DETAIL)) {
-                        this.txtUrlDetail.setMovementMethod(LinkMovementMethod.getInstance());
-                        this.txtUrlDetail.setText(url.getUrl());
+                        //this.txtUrlDetail.setMovementMethod(LinkMovementMethod.getInstance());
+                        this.btnUrlDetail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Uri uri = Uri.parse("http://www.example.com");
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                startActivity(intent);
+                            }
+                        });
+                        //this.txtUrlDetail.setText(url.getUrl());
                     } else if (url.getType().equalsIgnoreCase(MarvelUtil.URL_TYPE_WIKI)) {
-                        this.txtUrlWiki.setText(url.getUrl());
+                        //this.txtUrlWiki.setText(url.getUrl());
                     }
                 }
         Glide.with(this).load(mCharacter.getThumbnail().getStandardFantastic()).into(imgThumbnail);
-//            this.txtUrlDetail.setText(mCharacter.);
-//            this.txtUrlWiki.setText("");
         }
 
-//        this.recyclerviewComics  = (RecyclerView) view.findViewById(R.id.recyclerview_detail_character_comics);
     }
 
     private boolean isFavorite(){

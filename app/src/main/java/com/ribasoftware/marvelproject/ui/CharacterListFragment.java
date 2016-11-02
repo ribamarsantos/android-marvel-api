@@ -12,7 +12,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,17 +48,13 @@ public class CharacterListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        this.setRetainInstance(true);
 
         setHasOptionsMenu(true);
-        if( mCharacters == null) {
-            Log.d("RMS", "CRIOU LISTA DE CHARACTERS");
+        if (mCharacters == null) {
             mCharacters = new ArrayList();
         }
         mAdapter = new CharacterAdapter(mCharacters, getContext());
         mAdapter.setCharacterClickListener(mClickListener);
-        Log.d("RMS", "onCreate");
-
     }
 
     @Override
@@ -69,25 +64,38 @@ public class CharacterListFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_character_list, container, false);
 
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.recyclerview_Character);
-        mEmptyView    = layout.findViewById(R.id.empty_result);
+        mEmptyView = layout.findViewById(R.id.empty_result);
         mEmptyView.setVisibility(View.GONE);
-        mLoading      = layout.findViewById(R.id.loading);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        }else {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        }
+        mLoading = layout.findViewById(R.id.loading);
 
-        mRecyclerView.setHasFixedSize(true);
+        setLayout();
+
         SlideInLeftAnimationAdapter alphaAdapter = new SlideInLeftAnimationAdapter(mAdapter);
         alphaAdapter.setDuration(2000);
 
         mRecyclerView.setAdapter(alphaAdapter);
 
-        Log.d("RMS", "onCreateView");
         // ini loader verifies is the loader with ID ID_LOADER is already instance then don't call again
         getActivity().getSupportLoaderManager().initLoader(ID_LOADER, null, loaderCallbacks);
         return layout;
+    }
+
+    private void setLayout() {
+        if (getResources().getBoolean(R.bool.phone)) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+            } else {
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            }
+        } else {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+            } else {
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            }
+        }
+
+        mRecyclerView.setHasFixedSize(true);
     }
 
     @Override
@@ -99,9 +107,6 @@ public class CharacterListFragment extends Fragment {
 
         mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         mSearchView.setOnQueryTextListener(searchListener);
-        Log.d("RMS", "onCreateOptionsMenu");
-
-
     }
 
     @Override
@@ -134,8 +139,8 @@ public class CharacterListFragment extends Fragment {
         Bundle params = new Bundle();
         params.putString(QUERY_PARAM, query);
         getActivity().getSupportLoaderManager().restartLoader(ID_LOADER, params, loaderCallbacks);
-        if ( mSearchView!= null)
-          mSearchView.clearFocus();
+        if (mSearchView != null)
+            mSearchView.clearFocus();
     }
 
     // Callback of LoaderManager
@@ -145,17 +150,15 @@ public class CharacterListFragment extends Fragment {
 
         @Override
         public Loader<List<Character>> onCreateLoader(int id, Bundle args) {
-            Log.d("RMS", "onCreateLoader");
             String query = args != null ? args.getString(QUERY_PARAM) : null;
             return new CharacterSearchTask(getContext(), query);
         }
 
         @Override
-        public void onLoadFinished(Loader<List<Character>> loader, List<Character> data) {
-            Log.d("RMS", "onLoadFinished");
-            if (data != null && data.size() > 0) {
+        public void onLoadFinished(Loader<List<Character>> loader, List<Character> characters) {
+            if (characters != null && characters.size() > 0) {
                 mCharacters.clear();
-                mCharacters.addAll(data);
+                mCharacters.addAll(characters);
                 mAdapter.notifyDataSetChanged();
                 mEmptyView.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
@@ -166,11 +169,9 @@ public class CharacterListFragment extends Fragment {
             mLoading.setVisibility(View.GONE);
         }
 
-
-
         @Override
         public void onLoaderReset(Loader<List<Character>> loader) {
-            Log.d("RMS", "onLoaderReset");
+
         }
     };
 
@@ -178,19 +179,22 @@ public class CharacterListFragment extends Fragment {
     private OnCharacterClickListener mClickListener = new OnCharacterClickListener() {
         @Override
         public void onCharacterClick(Character character, int position) {
-            // mesmo com a pasta sw600dp nao esta vindo false nem true para table :/
-            Log.d("RMS",String.valueOf(getResources().getBoolean(R.bool.phone)));
-            if ( getResources().getBoolean(R.bool.phone)) {
+            // to work with table version 4.4.2
+            // it was necessary to create -sw420dp intead of sw600dp
+
+            // using bools.xml to verify if its phone or tablet
+
+            if (getResources().getBoolean(R.bool.phone)) {
                 Intent it = new Intent(getActivity(), CharacterDetailActivity.class);
 
                 it.putExtra(CharacterDetailActivity.EXTRA_CHARACTER, character);
                 startActivity(it);
-            }else{
-//                DetailCharacterFragment detailCharacterFragment = DetailCharacterFragment.newInstance(character);
-//                getActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.placeholderDetail, detailCharacterFragment)
-//                        .commit();
+            } else {
+                DetailCharacterFragment detailCharacterFragment = DetailCharacterFragment.newInstance(character);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.placeholderDetail, detailCharacterFragment)
+                        .commit();
             }
         }
     };

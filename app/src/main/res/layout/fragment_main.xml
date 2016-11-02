@@ -27,3 +27,4 @@
     <include layout="@layout/fragment_view_page" />
 
 </android.support.design.widget.CoordinatorLayout>
+
